@@ -25,20 +25,16 @@ struct PackedIndex
     uint32 Bits : 3;     // Always 4 or 0. No idea wtf it really is, flags maybe?
 };
 
-#pragma pack(4)
+#pragma pack(1)
 /** Name as seen in some kind of name pool. */
 struct FNameEntry
 {
     PackedIndex Index;     // 0x00
     FNameEntry* HashNext;  // 0x04  Some pointer, often NULL.
-    union                  // 0x0C
-    {
-        char AnsiName[1];
-        wchar WideName[1];
-    };
+    char AnsiName[1];      // 0x0C  This *potentially* can be a widechar.
 };
 
-#pragma pack(4)
+#pragma pack(1)
 /** Name reference as seen in individual UObjects. */
 struct FName
 {
@@ -91,7 +87,7 @@ SPI_IMPLEMENT_ATTACH
         int entryCounter = 0;
         for (FNameEntry* nameEntry = *namePool;
              nameEntry->Index.Length != 0;
-             nameEntry = (FNameEntry*)((byte*)nameEntry + 12 + nameEntry->Index.Length + 1))
+             nameEntry = reinterpret_cast<FNameEntry*>(reinterpret_cast<byte*>(nameEntry) + sizeof FNameEntry + nameEntry->Index.Length))
         {
             writeln(L"NameDump [%d][%d] = %S", poolCounter, entryCounter, nameEntry->AnsiName);
             entryCounter++;
