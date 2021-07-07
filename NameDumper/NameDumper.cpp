@@ -2,7 +2,7 @@
 #include "../Common.h"
 
 
-SPI_PLUGINSIDE_SUPPORT(L"NameResearch", L"0.1.0", L"d00telemental", SPI_GAME_LE1 | SPI_GAME_LE2 | SPI_GAME_LE3, SPI_VERSION_ANY);
+SPI_PLUGINSIDE_SUPPORT(L"NameDumper", L"0.1.0", L"d00telemental", SPI_GAME_LE1 | SPI_GAME_LE2 | SPI_GAME_LE3, SPI_VERSION_ANY);
 SPI_PLUGINSIDE_POSTLOAD;
 SPI_PLUGINSIDE_ASYNCATTACH;
 
@@ -89,7 +89,7 @@ SPI_IMPLEMENT_ATTACH
              nameEntry->Index.Length != 0;
              nameEntry = reinterpret_cast<FNameEntry*>(reinterpret_cast<byte*>(nameEntry) + sizeof FNameEntry + nameEntry->Index.Length))
         {
-            writeln(L"NameDump [%d][%d] = %S", poolCounter, entryCounter, nameEntry->AnsiName);
+            writeln(L"NameDump[%d][%d] %S", poolCounter, entryCounter, nameEntry->AnsiName);
             entryCounter++;
         }
         poolCounter++;

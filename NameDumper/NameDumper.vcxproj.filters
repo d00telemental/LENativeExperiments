@@ -11,7 +11,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="NameResearch.cpp">
+    <ClCompile Include="NameDumper.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
