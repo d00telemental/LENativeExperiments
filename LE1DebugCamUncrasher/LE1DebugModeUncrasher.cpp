@@ -27,7 +27,7 @@ SPI_PLUGINSIDE_ASYNCATTACH;
 //             localController = localPlayer->Actor;
 //         }
 //     }
-//     UPlayerInput* playerInput = localController->PlayerInput;
+//     UPlayerInput* playerInput = localController->PlayerInput;  // <-- this is where the crash happens, localController is NULL
 //     if (!playerInput->bUsingGamepad)
 //     {
 //         return 0;
@@ -48,7 +48,9 @@ SPI_IMPLEMENT_ATTACH
     writeln(L"Attach - hello!");
 
     byte* crashingMethod;
-    char* crashingPattern = "48 83 EC 28 8B 81 88 01 00 00 85 C0 79 0C C7 81 88 01 00 00 00 00 00 00 33 C0";
+    char crashingPattern[] = "48 83 EC 28 8B 81 88 01 00 00 85 C0 79 0C C7 81 88 01 00 00 00 00 00 00 33 C0";
+    char replacementBytes[] = "\x90\x90\x90\x90\x90\x90\x90\xEB";
+    uint64 replacementOffset = 0x4B;
     
     auto rc = InterfacePtr->FindPattern((void**)&crashingMethod, crashingPattern);
     if (rc != SPIReturn::Success)
@@ -57,23 +59,20 @@ SPI_IMPLEMENT_ATTACH
         return false;
     }
 
-    char replacementBytes[] = "\x90\x90\x90\x90\x90\x90\x90\xEB";
-    uint64 replacementOffset = 0x4B;
+    writeln(L"Attach - found pattern at %p, destination is %p !",
+        crashingMethod, crashingMethod + replacementOffset);
 
-    writeln(L"Attach - found pattern at %p, destination is %p, sizeof replacement is 0x%02X !",
-        crashingMethod, crashingMethod + replacementOffset, sizeof replacementBytes - 1);
-
-    // This will use RAII to automatically restore the memory protection.
+    // Use RAII to automatically restore the memory protection on scope exit.
     struct RAIIMemoryPatchingContext
     {
         byte* Target;
         char* Replacement;
         size_t Length;
         int32 OldProtect;
-        bool NeedsReverse;
+        bool NeedsDestructor;
 
         RAIIMemoryPatchingContext(byte* target, char* replacement, size_t length)
-            : Target{ target }, Replacement{ replacement }, Length{ length }, NeedsReverse{ false }
+            : Target{ target }, Replacement{ replacement }, Length{ length }, NeedsDestructor{ false }
         {
             if (!VirtualProtect(target, length, PAGE_EXECUTE_READWRITE, (DWORD*)&OldProtect))
             {
@@ -83,12 +82,12 @@ SPI_IMPLEMENT_ATTACH
 
             memcpy(target, replacement, length);
             writeln(L"Attach - UGFxMovie::SomeMethod() patched!");
-            NeedsReverse = true;
+            NeedsDestructor = true;
         }
 
         ~RAIIMemoryPatchingContext()
         {
-            if (NeedsReverse)
+            if (NeedsDestructor)
             {
                 VirtualProtect(Target, Length, OldProtect, (DWORD*)&OldProtect);
             }
