@@ -22,5 +22,8 @@
     <ClInclude Include="..\Interface.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="PrivateUtils.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

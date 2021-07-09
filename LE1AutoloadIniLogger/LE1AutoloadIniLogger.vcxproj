@@ -90,6 +90,7 @@
   <ItemGroup>
     <ClInclude Include="..\Common.h" />
     <ClInclude Include="..\Interface.h" />
+    <ClInclude Include="PrivateUtils.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
