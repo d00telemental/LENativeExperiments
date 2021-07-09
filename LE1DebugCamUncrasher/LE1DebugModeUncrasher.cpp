@@ -27,7 +27,7 @@ SPI_PLUGINSIDE_ASYNCATTACH;
 //             localController = localPlayer->Actor;
 //         }
 //     }
-//     UPlayerInput* playerInput = localController->PlayerInput;  // <-- this is where the crash happens, localController is NULL
+//     UPlayerInput* playerInput = localController->PlayerInput;  // <-- this is where the crash happens, playerInput is NULL
 //     if (!playerInput->bUsingGamepad)
 //     {
 //         return 0;
@@ -52,8 +52,8 @@ SPI_IMPLEMENT_ATTACH
     char replacementBytes[] = "\x90\x90\x90\x90\x90\x90\x90\xEB";
     uint64 replacementOffset = 0x4B;
     
-    auto rc = InterfacePtr->FindPattern((void**)&crashingMethod, crashingPattern);
-    if (rc != SPIReturn::Success)
+    if (auto rc = InterfacePtr->FindPattern((void**)&crashingMethod, crashingPattern); 
+        rc != SPIReturn::Success)
     {
         writeln(L"Attach - failed to find the pattern: %d / %s", rc, SPIReturnToString(rc));
         return false;

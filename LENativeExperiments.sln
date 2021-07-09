@@ -7,6 +7,10 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "NameDumper", "NameDumper\Na
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "LE1DebugModeUncrasher", "LE1DebugCamUncrasher\LE1DebugModeUncrasher.vcxproj", "{F533C752-B045-4347-90EF-D25EF80C028F}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "LE1ProcessEventLogger", "LE1ProcessEventLogger\LE1ProcessEventLogger.vcxproj", "{A0D8B7E4-D7DA-43FF-AEE1-08C9103B2E18}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "LE1AutoloadIniLogger", "LE1AutoloadIniLogger\LE1AutoloadIniLogger.vcxproj", "{625BDC0C-E880-46C4-AFFF-4297F6C3BC84}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -21,6 +25,14 @@ Global
 		{F533C752-B045-4347-90EF-D25EF80C028F}.Debug|x64.Build.0 = Debug|x64
 		{F533C752-B045-4347-90EF-D25EF80C028F}.Release|x64.ActiveCfg = Release|x64
 		{F533C752-B045-4347-90EF-D25EF80C028F}.Release|x64.Build.0 = Release|x64
+		{A0D8B7E4-D7DA-43FF-AEE1-08C9103B2E18}.Debug|x64.ActiveCfg = Debug|x64
+		{A0D8B7E4-D7DA-43FF-AEE1-08C9103B2E18}.Debug|x64.Build.0 = Debug|x64
+		{A0D8B7E4-D7DA-43FF-AEE1-08C9103B2E18}.Release|x64.ActiveCfg = Release|x64
+		{A0D8B7E4-D7DA-43FF-AEE1-08C9103B2E18}.Release|x64.Build.0 = Release|x64
+		{625BDC0C-E880-46C4-AFFF-4297F6C3BC84}.Debug|x64.ActiveCfg = Debug|x64
+		{625BDC0C-E880-46C4-AFFF-4297F6C3BC84}.Debug|x64.Build.0 = Debug|x64
+		{625BDC0C-E880-46C4-AFFF-4297F6C3BC84}.Release|x64.ActiveCfg = Release|x64
+		{625BDC0C-E880-46C4-AFFF-4297F6C3BC84}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
