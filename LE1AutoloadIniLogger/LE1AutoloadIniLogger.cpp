@@ -1,8 +1,9 @@
 #include <vector>
 
-#include "PrivateUtils.h"
 #include "../Interface.h"
 #include "../Common.h"
+
+#include "PrivateUtils.h"
 #include "../SDK/LE1SDK/SdkHeaders.h"
 
 
@@ -58,12 +59,11 @@ void ProcessEvent_hook(UObject* Context, UFunction* Function, void* Parms, void*
 {
     if (!strcmp(Function->GetFullName(), "Function SFXGame.BioHUD.PostRender"))
     {
-        auto bioHud = (ABioHUD*)Context;
-        auto hudCanvas = bioHud->Canvas;
+        auto hudCanvas = ((ABioHUD*)Context)->Canvas;
 
-        hudCanvas->SetPos(100.f, 100.f);
-        hudCanvas->SetDrawColor(0xFF, 0x44, 0x44, 0xFF);
-        //hudCanvas->DrawTextW(FString{ L"GExtraContent:" }, TRUE, 1.f, 1.f, nullptr);
+        hudCanvas->SetPos(200.f, 200.f);
+        hudCanvas->SetDrawColor(0xFF, 0x00, 0x00, 0xFF);
+        hudCanvas->DrawTextW(FString{ L"THIS IS A WIP VERSION, USES A HARDCODED PATH!!!" }, 0, 1.25f, 1.25f, nullptr);
     }
 
     ProcessEvent_orig(Context, Function, Parms, Result);

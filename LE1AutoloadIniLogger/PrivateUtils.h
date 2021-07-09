@@ -1,4 +1,7 @@
 #pragma once
+#include <Windows.h>
+#include "../SDK/LE1SDK/SdkHeaders.h"
+
 
 #define _CONCAT_NAME(A, B) A ## B
 #define CONCAT_NAME(A, B) _CONCAT_NAME(A, B)
@@ -17,3 +20,60 @@
         writeln(L"Attach - failed to hook " #VAR L": %d / %s", rc, SPIReturnToString(rc)); \
         return false; \
     }
+
+
+template <typename T>
+T* FindObject() noexcept
+{
+    auto objects = UObject::GObjObjects();
+    for (auto i = 0; i < objects->Count; i++)
+    {
+        auto object = (*objects)(i);
+        if (object && object->IsA(T::StaticClass()) && strcmp(object->Name.GetName(), "Default_"))
+        {
+            return (T*)object;
+        }
+    }
+    return nullptr;
+}
+
+UEngine* GetEngine() noexcept
+{
+    return FindObject<UEngine>();
+}
+ABioWorldInfo* GetWorldInfo() noexcept
+{
+    auto engine = GetEngine();
+    if (!engine) return nullptr;
+    return (ABioWorldInfo*)engine->GetCurrentWorldInfo();
+}
+ABioPlayerController* GetPlayerController() noexcept
+{
+    auto worldInfo = GetWorldInfo();
+    if (!worldInfo) return nullptr;
+    return (ABioPlayerController*)worldInfo->LocalPlayerController;
+}
+ABioPawn* GetPlayerPawn() noexcept
+{
+    auto playerCtrl = GetPlayerController();
+    if (!playerCtrl) return nullptr;
+    return (ABioPawn*)playerCtrl->Pawn;
+}
+UBioPawnBehavior* GetPlayerBehavior() noexcept
+{
+    auto playerPawn = GetPlayerPawn();
+    if (!playerPawn) return nullptr;
+    return playerPawn->m_oBehavior;
+}
+ABioBaseSquad* GetPlayerSquad()
+{
+    auto playerBehavior = GetPlayerBehavior();
+    if (!playerBehavior) return nullptr;
+    return playerBehavior->GetSquad();
+}
+ABioSPGame* GetBioSPGame()
+{
+    auto worldInfo = GetWorldInfo();
+    if (!worldInfo) return nullptr;
+    return (ABioSPGame*)worldInfo->Game;
+}
