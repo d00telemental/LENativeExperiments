@@ -10,9 +10,9 @@
 
 
 #ifndef NDEBUG
-static bool GIsRelease = false;
+constexpr bool GIsRelease = false;
 #else
-static bool GIsRelease = true;
+constexpr bool GIsRelease = true;
 #endif
 
 
@@ -28,11 +28,15 @@ static bool GIsRelease = true;
     auto _ = SDKInitializer::Instance(); \
     if (!SDKInitializer::Instance()->GetBioNamePools()) \
     { \
+        MessageBoxW(nullptr, L"GetBioNamePools() returned NULL, report this issue to ME3Tweaks or Mass Effect Modding Community Discord!", L"LE1AutoloadEnabler init error", \
+            MB_OK | MB_ICONERROR | MB_APPLMODAL); \
         writeln(L"Attach - SDK initialization returns NULL BioName pools!"); \
         return false; \
     } \
     if (!SDKInitializer::Instance()->GetObjects()) \
     { \
+        MessageBoxW(nullptr, L"GetObjects() returned NULL, report this issue to ME3Tweaks or Mass Effect Modding Community Discord!", L"LE1AutoloadEnabler init error", \
+            MB_OK | MB_ICONERROR | MB_APPLMODAL); \
         writeln(L"Attach - SDK initialization returns NULL GObjObjects array!"); \
         return false; \
     }
@@ -40,6 +44,9 @@ static bool GIsRelease = true;
 #define INIT_FIND_PATTERN(VAR, PATTERN) \
     if (auto rc = InterfacePtr->FindPattern((void**)&VAR, PATTERN); rc != SPIReturn::Success) \
     { \
+        wchar_t buffer[512]; \
+        swprintf_s(buffer, 512, L"Failed to find " #VAR L" pattern (%d / %s),\nreport this issue to ME3Tweaks or Mass Effect Modding Community Discord!", rc, SPIReturnToString(rc)); \
+        MessageBoxW(nullptr, buffer, L"LE1AutoloadEnabler init error", MB_OK | MB_ICONERROR | MB_APPLMODAL); \
         writeln(L"Attach - failed to find " #VAR L"pattern: %d / %s", rc, SPIReturnToString(rc)); \
         return false; \
     }
@@ -47,6 +54,9 @@ static bool GIsRelease = true;
 #define INIT_HOOK_PATTERN(VAR) \
     if (auto rc = InterfacePtr->InstallHook(MYHOOK #VAR, VAR, CONCAT_NAME(VAR, _hook), (void**)& CONCAT_NAME(VAR, _orig)); rc != SPIReturn::Success) \
     { \
+        wchar_t buffer[512]; \
+        swprintf_s(buffer, 512, L"Failed to hook " #VAR L" (%d / %s),\nreport this issue to ME3Tweaks or Mass Effect Modding Community Discord!", rc, SPIReturnToString(rc)); \
+        MessageBoxW(nullptr, buffer, L"LE1AutoloadEnabler init error", MB_OK | MB_ICONERROR | MB_APPLMODAL); \
         writeln(L"Attach - failed to hook " #VAR L": %d / %s", rc, SPIReturnToString(rc)); \
         return false; \
     }

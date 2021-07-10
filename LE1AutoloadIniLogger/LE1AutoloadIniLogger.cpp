@@ -91,7 +91,10 @@ void ProcessEvent_hook(UObject* Context, UFunction* Function, void* Parms, void*
 
 SPI_IMPLEMENT_ATTACH
 {
-    Common::OpenConsole();
+    if (!GIsRelease)
+    {
+        Common::OpenConsole();
+    }
 
     // Initialize the SDK because we need object names.
     
@@ -118,6 +121,9 @@ SPI_IMPLEMENT_ATTACH
 
 SPI_IMPLEMENT_DETACH
 {
-    Common::CloseConsole();
+    if (!GIsRelease)
+    {
+        Common::CloseConsole();
+    }
     return true;
 }
