@@ -109,6 +109,7 @@ ABioSPGame* GetBioSPGame()
 class NonCopyMovable
 {
 public:
+    NonCopyMovable() = default;
     NonCopyMovable(const NonCopyMovable& other) = delete;
     NonCopyMovable(NonCopyMovable&& other) = delete;
     NonCopyMovable& operator=(const NonCopyMovable& other) = delete;
@@ -117,6 +118,7 @@ public:
 
 class NonConstructible
 {
+public:
     NonConstructible() = delete;
     ~NonConstructible() = delete;
 };
