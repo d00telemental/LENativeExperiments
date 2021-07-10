@@ -9,7 +9,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "LE1DebugModeUncrasher", "LE
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "LE1ProcessEventLogger", "LE1ProcessEventLogger\LE1ProcessEventLogger.vcxproj", "{A0D8B7E4-D7DA-43FF-AEE1-08C9103B2E18}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "LE1AutoloadIniLogger", "LE1AutoloadIniLogger\LE1AutoloadIniLogger.vcxproj", "{625BDC0C-E880-46C4-AFFF-4297F6C3BC84}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "LE1AutoloadEnabler", "LE1AutoloadEnabler\LE1AutoloadEnabler.vcxproj", "{625BDC0C-E880-46C4-AFFF-4297F6C3BC84}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

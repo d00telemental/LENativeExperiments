@@ -16,7 +16,7 @@
     <ProjectGuid>{625BDC0C-E880-46C4-AFFF-4297F6C3BC84}</ProjectGuid>
     <RootNamespace>LE1ProcessEventLogger</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
-    <ProjectName>LE1AutoloadIniLogger</ProjectName>
+    <ProjectName>LE1AutoloadEnabler</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
@@ -85,7 +85,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="LE1AutoloadIniLogger.cpp" />
+    <ClCompile Include="LE1AutoloadEnabler.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Common.h" />

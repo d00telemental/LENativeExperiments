@@ -11,7 +11,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="LE1AutoloadIniLogger.cpp">
+    <ClCompile Include="LE1AutoloadEnabler.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
