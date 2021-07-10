@@ -1,4 +1,3 @@
-#include <vector>
 #include "../Interface.h"
 #include "../Common.h"
 #include "PrivateUtils.h"
@@ -14,11 +13,12 @@ SPI_PLUGINSIDE_ASYNCATTACH;
 
 
 // ProcessIni hook
+// Logs every invocation, call itself for each found Autoload.ini.
 // ======================================================================
 
 bool GOriginalCalled = false;
 ExtraContent* GExtraContent = nullptr;
-std::vector<wchar_t*> GExtraAutoloadPaths{};
+std::vector<std::wstring> GExtraAutoloadPaths{};
 
 // NI: The first param is actually a class pointer.
 typedef void (*tProcessIni)(ExtraContent* ExtraContent, FString* IniPath, FString* BasePath);
@@ -32,9 +32,9 @@ void ProcessIni_hook(ExtraContent* ExtraContent, FString* IniPath, FString* Base
     if (!GOriginalCalled)
     {
         GOriginalCalled = true;
-        for (auto autoloadPath : GExtraAutoloadPaths)
+        for (const auto& autoloadPath : GExtraAutoloadPaths)
         {
-            ProcessIni(ExtraContent, &FString{ autoloadPath }, nullptr);
+            ProcessIni(ExtraContent, &FString{ const_cast<wchar_t*>(autoloadPath.c_str()) }, nullptr);
         }
         GExtraContent = ExtraContent;
     }
@@ -44,6 +44,7 @@ void ProcessIni_hook(ExtraContent* ExtraContent, FString* IniPath, FString* Base
 
 
 // ProcessEvent hook
+// Renders autoload profiler, allows toggling it.
 // ======================================================================
 
 typedef void (*tProcessEvent)(UObject* Context, UFunction* Function, void* Parms, void* Result);
@@ -53,11 +54,6 @@ tProcessEvent ProcessEvent_orig = nullptr;
 void ProcessEvent_hook(UObject* Context, UFunction* Function, void* Parms, void* Result)
 {
     static ExtraContentHUD* hud = nullptr;
-#ifndef NDEBUG
-    static bool drawInitially = true;
-#else
-    static bool drawInitially = false;
-#endif
 
 
     // Render autoload profiler HUD.
@@ -66,7 +62,7 @@ void ProcessEvent_hook(UObject* Context, UFunction* Function, void* Parms, void*
     {
         if (!hud)
         {
-            hud = new ExtraContentHUD{ GExtraContent, drawInitially };
+            hud = new ExtraContentHUD{ GExtraContent, !GIsRelease };
         }
         hud->UpdateCanvas(((ABioHUD*)Context)->Canvas);
         hud->Draw();
@@ -101,7 +97,6 @@ SPI_IMPLEMENT_ATTACH
     
     INIT_CHECK_SDK();
 
-
     // Find and hook some things.
 
     INIT_FIND_PATTERN(ProcessIni, "40 55 56 57 41 54 41 55 41 56 41 57 48 8D AC 24 A0 EC FF FF B8 60 14 00 00");
@@ -110,10 +105,13 @@ SPI_IMPLEMENT_ATTACH
     INIT_FIND_PATTERN(ProcessEvent, "40 55 41 56 41 57 48 81 EC 90 00 00 00 48 8D 6C 24 20");
     INIT_HOOK_PATTERN(ProcessEvent);
 
-
     // Get a list of DLC Autoloads.
-    GExtraAutoloadPaths.push_back(L"..\\..\\BioGame\\DLC\\DLC_Testi\\AutoLoad.ini");
 
+    for (const auto& autoload : GetAllDLCAutoloads(GetDLCsRoot()))
+    {
+        writeln(L"Attach: found an autoload: %s", autoload.c_str());
+        GExtraAutoloadPaths.push_back(autoload.c_str());
+    }
 
     return true;
 }

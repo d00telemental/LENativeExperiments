@@ -1,6 +1,19 @@
 #pragma once
+#include <string>
+#include <vector>
+#include <type_traits>
 #include <Windows.h>
 #include "../SDK/LE1SDK/SdkHeaders.h"
+
+#pragma comment(lib, "Shlwapi.lib")
+#include "Shlwapi.h"
+
+
+#ifndef NDEBUG
+static bool GIsRelease = false;
+#else
+static bool GIsRelease = true;
+#endif
 
 
 #define _CONCAT_NAME(A, B) A ## B
@@ -100,6 +113,47 @@ ABioSPGame* GetBioSPGame()
     auto worldInfo = GetWorldInfo();
     if (!worldInfo) return nullptr;
     return (ABioSPGame*)worldInfo->Game;
+}
+
+
+// Functions used to make a list of available DLCs.
+// ======================================================================
+
+std::wstring GetDLCsRoot()
+{
+    wchar_t modulePath[512];
+
+    GetModuleFileNameW(nullptr, modulePath, 512);
+    PathRemoveFileSpec(modulePath);
+    PathRemoveFileSpec(modulePath);
+    PathRemoveFileSpec(modulePath);
+
+    std::wstring root;
+    root.append(modulePath);
+    root.append(L"\\BioGame\\DLC\\");
+
+    return root;
+}
+
+std::vector<std::wstring> GetAllDLCAutoloads(std::wstring&& searchRoot)
+{
+    std::vector<std::wstring> autoloadPaths{};
+    searchRoot.append(L"*");
+
+    WIN32_FIND_DATA fd;
+    HANDLE handle = FindFirstFileW(searchRoot.c_str(), &fd);
+    do
+    {
+        if (fd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY && wcslen(fd.cFileName) > 4
+            && fd.cFileName[0] == L'D' && fd.cFileName[1] == L'L' && fd.cFileName[2] == L'C' && fd.cFileName[3] == L'_')
+        {
+            wchar_t autoloadPath[512];
+            swprintf_s(autoloadPath, 512, L"..\\..\\BioGame\\DLC\\%s\\AutoLoad.ini", fd.cFileName);
+            autoloadPaths.emplace_back(autoloadPath);
+        }
+    } while (FindNextFile(handle, &fd) != 0);
+
+    return autoloadPaths;
 }
 
 

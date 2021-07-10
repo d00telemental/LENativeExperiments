@@ -110,10 +110,10 @@ private:
         canvas_->SetDrawColor(UNPACK_BGRA(colorHeader_));
 
         canvas_->SetPos(start_.X, start_.Y);
-        canvas_->DrawTextW(FString{ L"Extra content" }, 1, 1.f, 1.f, nullptr);
+        canvas_->DrawTextW(FString{ L"Autoload.ini profile" }, 1, 1.f, 1.f, nullptr);
 
         canvas_->SetPos(size_.X - start_.X, start_.Y);
-        canvas_->DrawTextRA(FString{ L"Autoload.ini profile" }, 1);
+        canvas_->DrawTextRA(FString{ L"ASI built " __DATE__ " " __TIME__ }, 1);
 
         canvas_->Draw2DLine(
             start_.X, start_.Y + 30.f,
