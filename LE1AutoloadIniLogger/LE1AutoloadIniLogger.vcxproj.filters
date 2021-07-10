@@ -25,5 +25,8 @@
     <ClInclude Include="PrivateUtils.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="PrivateClasses.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

@@ -7,6 +7,23 @@
 #define CONCAT_NAME(A, B) _CONCAT_NAME(A, B)
 
 
+// SDK and SDK hooks initialization macros.
+// MUST ONLY BE USED IN SPI ATTACH!
+// ======================================================================
+
+#define INIT_CHECK_SDK() \
+    auto _ = SDKInitializer::Instance(); \
+    if (!SDKInitializer::Instance()->GetBioNamePools()) \
+    { \
+        writeln(L"Attach - SDK initialization returns NULL BioName pools!"); \
+        return false; \
+    } \
+    if (!SDKInitializer::Instance()->GetObjects()) \
+    { \
+        writeln(L"Attach - SDK initialization returns NULL GObjObjects array!"); \
+        return false; \
+    }
+
 #define INIT_FIND_PATTERN(VAR, PATTERN) \
     if (auto rc = InterfacePtr->FindPattern((void**)&VAR, PATTERN); rc != SPIReturn::Success) \
     { \
@@ -22,6 +39,9 @@
     }
 
 
+// A non-default UObject searching function.
+// ======================================================================
+
 template <typename T>
 T* FindObject() noexcept
 {
@@ -36,6 +56,10 @@ T* FindObject() noexcept
     }
     return nullptr;
 }
+
+
+// Common UObject accessory functions.
+// ======================================================================
 
 UEngine* GetEngine() noexcept
 {
@@ -77,3 +101,22 @@ ABioSPGame* GetBioSPGame()
     if (!worldInfo) return nullptr;
     return (ABioSPGame*)worldInfo->Game;
 }
+
+
+// Class / object mixins.
+// ======================================================================
+
+class NonCopyMovable
+{
+public:
+    NonCopyMovable(const NonCopyMovable& other) = delete;
+    NonCopyMovable(NonCopyMovable&& other) = delete;
+    NonCopyMovable& operator=(const NonCopyMovable& other) = delete;
+    NonCopyMovable& operator=(NonCopyMovable&& other) = delete;
+};
+
+class NonConstructible
+{
+    NonConstructible() = delete;
+    ~NonConstructible() = delete;
+};
