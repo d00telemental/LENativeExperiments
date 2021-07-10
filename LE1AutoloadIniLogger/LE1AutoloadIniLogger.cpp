@@ -26,18 +26,16 @@ tProcessIni ProcessIni = nullptr;
 tProcessIni ProcessIni_orig = nullptr;
 void ProcessIni_hook(ExtraContent* ExtraContent, FString* IniPath, FString* BasePath)
 {
-    writeln(L"ProcessIni - ExtraContent = %p , IniPath is %s", ExtraContent, IniPath->Data);
+    writeln(L"ProcessIni - ExtraContent = %p, IniPath is %s", ExtraContent, IniPath->Data);
     ProcessIni_orig(ExtraContent, IniPath, BasePath);
     
     if (!GOriginalCalled)
     {
         GOriginalCalled = true;
-
         for (auto autoloadPath : GExtraAutoloadPaths)
         {
             ProcessIni(ExtraContent, &FString{ autoloadPath }, nullptr);
         }
-
         GExtraContent = ExtraContent;
     }
 }
@@ -54,11 +52,39 @@ tProcessEvent ProcessEvent = nullptr;
 tProcessEvent ProcessEvent_orig = nullptr;
 void ProcessEvent_hook(UObject* Context, UFunction* Function, void* Parms, void* Result)
 {
+    static ExtraContentHUD* hud = nullptr;
+#ifndef NDEBUG
+    static bool drawInitially = true;
+#else
+    static bool drawInitially = false;
+#endif
+
+
+    // Render autoload profiler HUD.
+
     if (!strcmp(Function->GetFullName(), "Function SFXGame.BioHUD.PostRender") && GExtraContent)
     {
-        static ExtraContentHUD hud{ GExtraContent };
-        hud.UpdateCanvas(((ABioHUD*)Context)->Canvas);
-        hud.Draw();
+        if (!hud)
+        {
+            hud = new ExtraContentHUD{ GExtraContent, drawInitially };
+        }
+        hud->UpdateCanvas(((ABioHUD*)Context)->Canvas);
+        hud->Draw();
+    }
+
+
+    // Allow toggling the autoload profiler HUD on `profile autoload` command.
+
+    if (!strcmp(Function->GetFullName(), "Function Console.Typing.InputChar") && Parms && hud)
+    {
+        auto sfxConsole = reinterpret_cast<UConsole*>(Context);
+        auto inputParms = reinterpret_cast<UConsole_execInputChar_Parms*>(Parms);
+        if (inputParms->Unicode.Count >= 1 && inputParms->Unicode.Data[0] == L'\r'
+            && sfxConsole->TypedStr.Data
+            && !wcsncmp(sfxConsole->TypedStr.Data, L"profile ", 8))
+        {
+            hud->SetVisibility(!wcscmp(sfxConsole->TypedStr.Data, L"profile autoload"));
+        }
     }
 
     ProcessEvent_orig(Context, Function, Parms, Result);

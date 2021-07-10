@@ -42,6 +42,7 @@ class ExtraContentHUD final
 private:
     ExtraContent* extraContent_;
     UCanvas* canvas_;
+    bool draw_;
 
     FVector2D size_;
     FVector2D start_;
@@ -146,8 +147,9 @@ private:
     }
 
 public:
-    ExtraContentHUD(ExtraContent* extraContent)
+    ExtraContentHUD(ExtraContent* extraContent, bool drawInitially)
         : extraContent_{ extraContent }
+        , draw_{ drawInitially }
         , start_ { 40.f, 40.f }
         , size_{ 0.f, 0.f }
         , canvas_{ nullptr }
@@ -173,6 +175,11 @@ public:
 
     void Draw()
     {
+        if (!draw_)
+        {
+            return;
+        }
+
         drawBackground_();
         drawHeader_();
 
@@ -181,4 +188,6 @@ public:
         drawTopRow_();
         drawBottomRow_();
     }
+
+    void SetVisibility(bool draw) { draw_ = draw; }
 };
