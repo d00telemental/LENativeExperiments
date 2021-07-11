@@ -58,7 +58,7 @@ void ProcessEvent_hook(UObject* Context, UFunction* Function, void* Parms, void*
 
     // Render autoload profiler HUD.
 
-    if (!strcmp(Function->GetFullName(), "Function SFXGame.BioHUD.PostRender") && GExtraContent)
+    if (!strcmp(Function->GetFullName(), "Function SFXGame.BioHUD.PostRender"))
     {
         if (!hud)
         {
