@@ -98,6 +98,30 @@ private:
     // Functions to draw the bigger elements of this HUD
     // ======================================================================
 
+    void drawIdleBackground_()
+    {
+        canvas_->SetPos(0.f, 0.f);
+        canvas_->SetDrawColor(0x7F, 0, 0, 0x3F);
+        canvas_->DrawRect(size_.X, size_.Y, canvas_->DefaultTexture);
+    }
+
+    void drawIdleHeader_()
+    {
+        canvas_->SetDrawColor(0xFF, 0x00, 0x00, 0xFF);
+
+        canvas_->SetPos(start_.X, start_.Y);
+        canvas_->DrawTextW(FString{ L"Autoload.ini profile - IDLE" }, 1, 1.f, 1.f, nullptr);
+
+        canvas_->SetPos(size_.X - start_.X, start_.Y);
+        canvas_->DrawTextRA(FString{ L"ASI built " __DATE__ " " __TIME__ }, 1);
+
+        canvas_->Draw2DLine(
+            start_.X, start_.Y + 30.f,
+            (float)canvas_->SizeX - start_.X, start_.Y + 30.f,
+            FColor{ 0x00, 0x00, 0xFF, 0xFF });
+
+    }
+
     void drawBackground_()
     {
         canvas_->SetPos(0.f, 0.f);
@@ -147,8 +171,8 @@ private:
     }
 
 public:
-    ExtraContentHUD(ExtraContent* extraContent, bool drawInitially)
-        : extraContent_{ extraContent }
+    ExtraContentHUD(bool drawInitially)
+        : extraContent_{ nullptr }
         , draw_{ drawInitially }
         , start_ { 40.f, 40.f }
         , size_{ 0.f, 0.f }
@@ -162,8 +186,9 @@ public:
 
     }
 
-    void UpdateCanvas(UCanvas* hudCanvas)
+    void Update(UCanvas* hudCanvas, ExtraContent* extraContent)
     {
+        extraContent_ = extraContent;
         canvas_ = hudCanvas;
         size_ = FVector2D{ (float)canvas_->SizeX, (float)canvas_->SizeY };
 
@@ -180,6 +205,15 @@ public:
             return;
         }
 
+        if (!extraContent_)
+        {
+            drawIdleBackground_();
+            drawIdleHeader_();
+            return;
+        }
+
+        // Assuming that extraContent_ is not null from now on.
+
         drawBackground_();
         drawHeader_();
 
@@ -189,5 +223,6 @@ public:
         drawBottomRow_();
     }
 
-    void SetVisibility(bool draw) { draw_ = draw; }
+    void SetVisible(bool draw) { draw_ = draw; }
+    bool Visible() const noexcept { return draw_; }
 };

@@ -62,9 +62,9 @@ void ProcessEvent_hook(UObject* Context, UFunction* Function, void* Parms, void*
     {
         if (!hud)
         {
-            hud = new ExtraContentHUD{ GExtraContent, !GIsRelease };
+            hud = new ExtraContentHUD{ !GIsRelease };
         }
-        hud->UpdateCanvas(((ABioHUD*)Context)->Canvas);
+        hud->Update(((ABioHUD*)Context)->Canvas, GExtraContent);
         hud->Draw();
     }
 
@@ -79,7 +79,7 @@ void ProcessEvent_hook(UObject* Context, UFunction* Function, void* Parms, void*
             && sfxConsole->TypedStr.Data
             && !wcsncmp(sfxConsole->TypedStr.Data, L"profile ", 8))
         {
-            hud->SetVisibility(!wcscmp(sfxConsole->TypedStr.Data, L"profile autoload"));
+            hud->SetVisible(!wcscmp(sfxConsole->TypedStr.Data, L"profile autoload"));
         }
     }
 
@@ -91,9 +91,10 @@ void ProcessEvent_hook(UObject* Context, UFunction* Function, void* Parms, void*
 
 SPI_IMPLEMENT_ATTACH
 {
-    if (!GIsRelease)
+    //if (!GIsRelease)
     {
         Common::OpenConsole();
+        writeln(L"Attach - hello there!");
     }
 
     // Initialize the SDK because we need object names.
@@ -112,7 +113,7 @@ SPI_IMPLEMENT_ATTACH
 
     for (const auto& autoload : GetAllDLCAutoloads(GetDLCsRoot()))
     {
-        writeln(L"Attach: found an autoload: %s", autoload.c_str());
+        writeln(L"Attach - found a DLC autoload: %s", autoload.c_str());
         GExtraAutoloadPaths.push_back(autoload.c_str());
     }
 
@@ -121,7 +122,7 @@ SPI_IMPLEMENT_ATTACH
 
 SPI_IMPLEMENT_DETACH
 {
-    if (!GIsRelease)
+    //if (!GIsRelease)
     {
         Common::CloseConsole();
     }
