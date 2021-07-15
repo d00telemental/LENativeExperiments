@@ -7,7 +7,7 @@
 
 #define MYHOOK "LE1AutoloadIniLogger_"
 
-SPI_PLUGINSIDE_SUPPORT(L"LE1AutoloadIniLogger", L"0.1.0", L"---", SPI_GAME_LE1, SPI_VERSION_LATEST);
+SPI_PLUGINSIDE_SUPPORT(L"LE1AutoloadIniLogger", L"---", L"0.2.0", SPI_GAME_LE1, SPI_VERSION_LATEST);
 SPI_PLUGINSIDE_POSTLOAD;
 SPI_PLUGINSIDE_ASYNCATTACH;
 
@@ -46,6 +46,8 @@ void ProcessIni_hook(ExtraContent* ExtraContent, FString* IniPath, FString* Base
 // ProcessEvent hook
 // Renders autoload profiler, allows toggling it.
 // ======================================================================
+
+#ifndef NDEBUG
 
 typedef void (*tProcessEvent)(UObject* Context, UFunction* Function, void* Parms, void* Result);
 tProcessEvent ProcessEvent = nullptr;
@@ -86,28 +88,29 @@ void ProcessEvent_hook(UObject* Context, UFunction* Function, void* Parms, void*
     ProcessEvent_orig(Context, Function, Parms, Result);
 }
 
+#endif
+
 // ======================================================================
 
 
 SPI_IMPLEMENT_ATTACH
 {
-    //if (!GIsRelease)
-    {
+#ifndef NDEBUG
         Common::OpenConsole();
         writeln(L"Attach - hello there!");
-    }
 
-    // Initialize the SDK because we need object names.
-    
-    INIT_CHECK_SDK();
+        // Initialize the SDK because we need object names.
+        INIT_CHECK_SDK();
 
-    // Find and hook some things.
+        // Hook ProcessEvent for debugging.
+        INIT_FIND_PATTERN(ProcessEvent, "40 55 41 56 41 57 48 81 EC 90 00 00 00 48 8D 6C 24 20");
+        INIT_HOOK_PATTERN(ProcessEvent);
+#endif
+
+    // Find and hook the ProcessIni.
 
     INIT_FIND_PATTERN(ProcessIni, "40 55 56 57 41 54 41 55 41 56 41 57 48 8D AC 24 A0 EC FF FF B8 60 14 00 00");
     INIT_HOOK_PATTERN(ProcessIni);
-
-    INIT_FIND_PATTERN(ProcessEvent, "40 55 41 56 41 57 48 81 EC 90 00 00 00 48 8D 6C 24 20");
-    INIT_HOOK_PATTERN(ProcessEvent);
 
     // Get a list of DLC Autoloads.
 
@@ -122,9 +125,8 @@ SPI_IMPLEMENT_ATTACH
 
 SPI_IMPLEMENT_DETACH
 {
-    //if (!GIsRelease)
-    {
-        Common::CloseConsole();
-    }
+#ifndef NDEBUG
+    Common::CloseConsole();
+#endif
     return true;
 }
