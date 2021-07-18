@@ -65,4 +65,3 @@ namespace Common
     }
 }
 
-#define writeln(msg,...) fwprintf_s(stdout, L"LENE::" msg "\n", __VA_ARGS__)

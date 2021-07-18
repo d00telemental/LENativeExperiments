@@ -2,6 +2,7 @@
 #include "../Common.h"
 #include "PrivateUtils.h"
 #include "PrivateClasses.h"
+#include "Logging.h"
 #include "../SDK/LE1SDK/SdkHeaders.h"
 
 
@@ -95,10 +96,10 @@ void ProcessEvent_hook(UObject* Context, UFunction* Function, void* Parms, void*
 
 SPI_IMPLEMENT_ATTACH
 {
-#ifndef NDEBUG
-        Common::OpenConsole();
+        initLog();
         writeln(L"Attach - hello there!");
 
+#ifndef NDEBUG
         // Initialize the SDK because we need object names.
         INIT_CHECK_SDK();
 
@@ -125,8 +126,6 @@ SPI_IMPLEMENT_ATTACH
 
 SPI_IMPLEMENT_DETACH
 {
-#ifndef NDEBUG
-    Common::CloseConsole();
-#endif
+    closeLog();
     return true;
 }
