@@ -11,6 +11,16 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "LE1ProcessEventLogger", "LE
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "LE1AutoloadEnabler", "LE1AutoloadEnabler\LE1AutoloadEnabler.vcxproj", "{625BDC0C-E880-46C4-AFFF-4297F6C3BC84}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SDK", "SDK", "{C189E155-00AB-4275-8DCC-CDB38DAC60F5}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "LE2SDK", "SDK\LE2SDK\LE2SDK.vcxproj", "{060896DA-DF2F-44BC-A05F-4B3058BF76C5}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "LE2", "LE2", "{6C4F015C-E6A3-4141-9554-48A3038485BA}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "LE2TestProject", "LE2TestProject\LE2TestProject.vcxproj", "{5B40C20D-3C9B-46C4-BA0C-BCF8CC20F0EB}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "LE1", "LE1", "{3033A28D-397B-4B0A-A31D-424E1DE6D3B2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -33,9 +43,21 @@ Global
 		{625BDC0C-E880-46C4-AFFF-4297F6C3BC84}.Debug|x64.Build.0 = Debug|x64
 		{625BDC0C-E880-46C4-AFFF-4297F6C3BC84}.Release|x64.ActiveCfg = Release|x64
 		{625BDC0C-E880-46C4-AFFF-4297F6C3BC84}.Release|x64.Build.0 = Release|x64
+		{060896DA-DF2F-44BC-A05F-4B3058BF76C5}.Debug|x64.ActiveCfg = Debug|x64
+		{060896DA-DF2F-44BC-A05F-4B3058BF76C5}.Debug|x64.Build.0 = Debug|x64
+		{060896DA-DF2F-44BC-A05F-4B3058BF76C5}.Release|x64.ActiveCfg = Release|x64
+		{060896DA-DF2F-44BC-A05F-4B3058BF76C5}.Release|x64.Build.0 = Release|x64
+		{5B40C20D-3C9B-46C4-BA0C-BCF8CC20F0EB}.Debug|x64.ActiveCfg = Debug|x64
+		{5B40C20D-3C9B-46C4-BA0C-BCF8CC20F0EB}.Debug|x64.Build.0 = Debug|x64
+		{5B40C20D-3C9B-46C4-BA0C-BCF8CC20F0EB}.Release|x64.ActiveCfg = Release|x64
+		{5B40C20D-3C9B-46C4-BA0C-BCF8CC20F0EB}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{060896DA-DF2F-44BC-A05F-4B3058BF76C5} = {C189E155-00AB-4275-8DCC-CDB38DAC60F5}
+		{5B40C20D-3C9B-46C4-BA0C-BCF8CC20F0EB} = {6C4F015C-E6A3-4141-9554-48A3038485BA}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {8E942D9B-6F34-46F0-8633-C5DA326F4C30}
