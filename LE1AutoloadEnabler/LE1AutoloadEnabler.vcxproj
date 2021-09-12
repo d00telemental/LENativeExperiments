@@ -90,11 +90,14 @@
     <ClCompile Include="LE1AutoloadEnabler.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\Common.h" />
-    <ClInclude Include="..\Interface.h" />
     <ClInclude Include="Logging.h" />
     <ClInclude Include="PrivateClasses.h" />
     <ClInclude Include="PrivateUtils.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SDK\LE1SDK\LE1SDK.vcxproj">
+      <Project>{fc391eb2-abe8-4f35-82b0-11c59a477683}</Project>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

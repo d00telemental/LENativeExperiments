@@ -59,6 +59,7 @@
       <LanguageStandard>stdcpp17</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
       <AdditionalOptions>/bigobj %(AdditionalOptions)</AdditionalOptions>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -76,6 +77,7 @@
       <LanguageStandard>stdcpp17</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
       <AdditionalOptions>/bigobj %(AdditionalOptions)</AdditionalOptions>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -88,8 +90,9 @@
     <ClCompile Include="LE1ProcessEventLogger.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\Common.h" />
-    <ClInclude Include="..\Interface.h" />
+    <ProjectReference Include="..\SDK\LE1SDK\LE1SDK.vcxproj">
+      <Project>{fc391eb2-abe8-4f35-82b0-11c59a477683}</Project>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -7,6 +7,9 @@ SPI_PLUGINSIDE_POSTLOAD;
 SPI_PLUGINSIDE_ASYNCATTACH;
 
 
+#define writeln(frmt, ...)   fwprintf_s(stdout, frmt "\n", __VA_ARGS__);
+
+
 #pragma pack(4)
 template <typename T>
 struct TArray

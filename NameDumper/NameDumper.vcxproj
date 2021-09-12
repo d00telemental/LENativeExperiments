@@ -87,10 +87,6 @@
   <ItemGroup>
     <ClCompile Include="NameDumper.cpp" />
   </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="..\Common.h" />
-    <ClInclude Include="..\Interface.h" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

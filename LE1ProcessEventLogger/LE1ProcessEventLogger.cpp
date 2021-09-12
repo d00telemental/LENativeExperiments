@@ -10,6 +10,9 @@ SPI_PLUGINSIDE_POSTLOAD;
 SPI_PLUGINSIDE_ASYNCATTACH;
 
 
+#define writeln(frmt, ...)   fwprintf_s(stdout, frmt "\n", __VA_ARGS__);
+
+
 // ProcessEvent hook
 // ======================================================================
 
